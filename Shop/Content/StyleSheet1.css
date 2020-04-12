@@ -1,0 +1,85 @@
+﻿.navbar-inverse {
+    background-color: #15089c;
+    border-color: #1537f1;
+}
+
+.qty {
+    width: 52px;
+}
+
+.btn-success {
+    color: #f4f2f2;
+    background-color: #11af06;
+    border-color: #4cae4c;
+}
+
+    .btn-success:hover {
+        color: #f4f2f2;
+        background-color: #108e08;
+        border-color: #4cae4c;
+    }
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #fefcfc;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+    color: #8f8c8c;
+}
+
+.header {
+    font-style: italic;
+    color: #2410ef;
+    font-weight: bold;
+}
+
+.items {
+    font-weight: bold;
+}
+
+.line {
+    display: block;
+    border: solid 1px #108e08;
+}
+
+.total-sum-text {
+    font-size: 1.5em;
+    color: #2410ef;
+}
+
+.total-sum {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #2410ef;
+}
+
+ .btn-success {
+    color: #f4f2f2;
+    background-color: #4cae4c;
+    border-color: #4cae4c;
+    width: 80px;
+     margin: 1px;
+}
+
+ /*.btn-success .te {
+    color: #f4f2f2;
+    background-color: #2410ef !important;
+    border-color: #2410ef;
+    margin: 1px;
+    width: 100px;
+}*/
+
+.basket .btn-success:hover {
+    color: #f4f2f2;
+    background-color: #108e08;
+    border-color: #4cae4c;
+}
+
+.bin img {
+    width: 100px;
+    height: 100px;
+    float: left;
+}
+.container {
+    float: left;
+}

@@ -1,0 +1,88 @@
+﻿
+<br />
+<div data-bind="foreach: orders.orders">
+    <div class="container" @*data-bind="visible: orders.().length > 0"*@>
+
+        <div class="row">
+            <div class="col-sm-3 col-sm-offset-1 col-xs-12 hidden-xs header">
+                <h4>Product's name</h4>
+            </div>
+            <div class="col-sm-3 col-xs-12 hidden-xs header">
+                <h4>Quantity</h4>
+            </div>
+            @*<div class="col-sm-4 col-xs-12 hidden-xs header">
+                <h4>Total $</h4>
+            </div>*@
+        </div>
+        <div class="row" data-bind="foreach: $data">
+            <div class="col-sm-3 col-sm-offset-1 col-xs-12">
+                <span class=" visible-xs header"> Product </span>
+                <p class="items" data-bind="text: Name"></p>
+            </div>
+            <div class="col-sm-3 col-xs-12">
+                <span class=" visible-xs header"> Qty </span>
+                <p class="items" data-bind="text: Qty"></p>
+            </div>
+            <div class="col-sm-2 col-sm-offset-3 col-xs-12 basket">
+                <button type="submit" class="btn btn-success ">Details</button>
+            </div>
+        
+            @*<div class="col-sm-3 col-xs-12">
+                    <span class=" visible-xs header"> Total $ </span>
+                    <p class="items" data-bind="text: Total"></p>
+                </div>*@
+        </div>
+        <div class="row">
+            <div class="total-sum-text col-sm-3 col-sm-offset-5">Total $</div>
+            <div class="col-sm-2  total-sum " data-bind="foreach: $parent.orders.total">
+                <span data-bind="text: $data"></span>
+            </div>
+        </div>
+        @*<div class="total-sum-text col-sm-3 col-sm-offset-6">Total $</div>*@   
+        <div class="line"></div>
+    </div>
+
+    <br />
+</div>
+
+
+@*<div class="row">
+    <div class="total-sum-text col-sm-3 col-sm-offset-4">Total $</div>
+    <div class="col-sm-2  total-sum " data-bind="foreach: total">
+        <span data-bind="text: $data"></span>
+    </div>
+</div>*@
+@*<div data-bind="visible: orders.productsList().length == 0">
+    <h2>Your basket is empty</h2>
+</div>*@
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script>
+    var OrderViewModel = function () {
+
+        var self = this;
+        
+        self.orders = {
+            orders : ko.observableArray([]),
+            total : ko.observable([])         
+             }
+
+
+
+        $.getJSON("/Basket/GetMyOrders",
+            function (userOrders) {
+                self.orders.orders(userOrders);
+                var sum = [];
+                for (let i = 0; i < userOrders.length; i++) {
+                    for (let j = 0; j < userOrders[i].length; j++ ) {
+                        sum[i] = userOrders[i][j].Total;
+                    }
+                }
+                self.orders.total(sum);
+
+            });
+    }
+
+    ko.applyBindings(new OrderViewModel());
+</script>

@@ -1,0 +1,76 @@
+﻿<br />
+<form data-bind="submit: buy">
+    <div class="container" data-bind="visible: basket.productsList().length > 0">
+
+        <div class="row">
+            <div class="col-sm-3 col-sm-offset-3 col-xs-12 hidden-xs header">
+                <h4>Product's name</h4>
+            </div>
+            <div class="col-sm-3 col-xs-12 hidden-xs header">
+                <h4>Quantity</h4>
+            </div>
+            <div class="col-sm-3 col-xs-12 hidden-xs header">
+                <h4>Total $</h4>
+            </div>
+        </div>
+        <div class="row" data-bind="foreach: basket.productsList">
+            <div class="col-sm-3 col-sm-offset-3 col-xs-12">
+                <span class=" visible-xs header"> Product </span>
+                <p class="items" data-bind="text: Name"></p>
+            </div>
+            <div class="col-sm-3 col-xs-12">
+                <span class=" visible-xs header"> Qty </span>
+                <p class="items" data-bind="text: Qty"></p>
+            </div>
+            <div class="col-sm-3 col-xs-12">
+                <span class=" visible-xs header"> Total $ </span>
+                <p class="items" data-bind="text: Total"></p>
+            </div>
+        </div>
+        <div class="line"></div>
+        <div class="row">
+            <div class="total-sum-text col-sm-3 col-sm-offset-6">Grand Total $</div>
+            <div class="col-sm-2  total-sum " data-bind="text: grandTotal"></div>
+            <div class="col-sm-2 col-sm-offset-9 col-xs-12 basket">
+                <button type="submit" class="btn btn-success " >Buy</button>
+            </div>
+        </div>
+    </div>
+</form>
+<div data-bind="visible: basket.productsList().length == 0">
+    <h2>Your basket is empty</h2>
+</div>
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script>
+
+        var BasketViewModel = function () {
+
+            var self = this;
+            self.grandTotal = ko.observable();
+            self.basket = {
+                productsList: ko.observableArray([]),
+                basketId: ko.observable()
+            }
+            $.getJSON("/Basket/GetMyBasket",
+                function (data) {
+                    self.basket.productsList(data.BasketProducts);
+                    self.basket.basketId(data.BasketId);
+                    var sum = 0;
+                    for (let i = 0; i < data.BasketProducts.length; i++) {
+                        sum += data.BasketProducts[i].Total;
+                    }
+                    self.grandTotal(sum);
+
+                });
+
+            self.buy = function () {
+                var basketJson = ko.toJS(self.basket);
+                $.post("/Basket/Buy", basketJson, function () {
+                    self.basket.productsList([]);
+                });
+            }
+        }
+
+        ko.applyBindings(new BasketViewModel());
+    </script>

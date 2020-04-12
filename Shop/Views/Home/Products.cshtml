@@ -1,0 +1,87 @@
+﻿<br>
+
+<button class="btn btn-primary"   data-bind="click: showProducts">Show items</button>
+
+<div class="container" data-bind="visible: products().length > 0">
+    <div class="row hidden-xs">
+        <div class="col-sm-2 col-xs-12  header">
+            <h4>Product's name</h4>
+        </div>
+        <div class="col-sm-2 col-xs-12  header">
+            <h4>Price $</h4>
+        </div>
+        <div class="col-sm-2 col-xs-12 header">
+            <h4>Qty in stock</h4>
+        </div>
+        <div class="col-sm-2 col-xs-12 header">
+            <h4>Quantity</h4>
+        </div>
+
+    </div>
+    <div class="row" data-bind="foreach: products">
+        <div class="col-sm-2 col-xs-12">
+            <span class=" visible-xs header"> Product </span>
+            <p  class="items"data-bind="text: Name"></p>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <span class=" visible-xs header"> Price $ </span>
+            <p class="items" data-bind="text: Price"></p>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <span class=" visible-xs header"> In stock </span>
+            <p class="items" data-bind="text: Quantity"></p>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+            <span class=" visible-xs header"> Qty </span>
+            <input  class="form-control qty items" type="number"   />
+        </div>
+        <div class="col-sm-2 col-sm-offset-1 col-xs-12 ">
+            <button class="btn btn-success" data-bind="click: $parent.add" style="margin-bottom: 1px;">Buy</button>
+        </div>
+    </div>
+    <div data-bind="visible: result"><h4>You added : <span data-bind="text: productName"></span> to your basket </h4> </div>
+
+</div>
+@*<p data-bind="text: qty"></p>*@
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+    var ProductViewModel = function () {
+
+        var self = this;
+        self.products = ko.observableArray([]);
+        self.showProducts = function () {
+            $.getJSON("/Home/GetProducts",
+                function (data) {
+                    self.products(data);
+                });
+        }
+
+        self.result = ko.observable(false);
+        self.productName = ko.observable();
+        self.add = function (product) {
+            var inputs = $(".qty");
+            for (let i = 0; i < inputs.length; i++) {
+                if (inputs[i].value !== "") {
+                    self.product.quantity(inputs[i].value);
+                    break;
+                }
+            }
+
+            self.productName(product.Name);
+            self.product.productId(product.Id);
+            var productJson = ko.toJS(self.product);
+            $.post("/Basket/Add", productJson, function () {
+                self.result(true);
+            });
+        }
+
+        self.product =
+        {
+            productId: ko.observable(),
+            quantity: ko.observable()
+        }
+    }
+    ko.applyBindings(new ProductViewModel());
+
+</script>
